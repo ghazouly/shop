@@ -1,6 +1,6 @@
 <h1>SHOP</h1>
 
-## About Shop
+## About SHOP
 
 SHOP is an One-Page-Shop Web application, built using a [PHP](php.net) one file and enables you to:
 

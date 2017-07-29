@@ -15,13 +15,14 @@ if(!empty($_POST["login"])) {
 		$dbConnection = mysqli_connect("localhost", "root", "", "shop");
 
 		$userName = $_POST["userName"];
-		$userPassword = $_POST["userPassword"];
+		$userPassword = md5($_POST["userPassword"]);
 
 		$query = "SELECT * FROM users
 				WHERE userName='$userName'
 				AND userPassword='$userPassword'";
 
 		$result = mysqli_query($dbConnection,$query);
+
 		$user = mysqli_fetch_assoc($result);
 
 
