@@ -41,12 +41,9 @@
 
 						$query = "SELECT * FROM users
 								WHERE userName='$userName'
-								AND userPassword='$userPassword'";
-
+								AND use</div>rPassword='$userPassword'";
 						$result = mysqli_query($dbConnection,$query);
-
 						$user = mysqli_fetch_assoc($result);
-
 
 						//validating login request.
 						if($user) {
@@ -106,9 +103,15 @@
 
 
 <?php } else { ?>
-						<h3>I. Login with rememberMe Cookie. <b>You have Successfully logged in!.</b></h3>
-						<br><hr><br>
-						<h3>II. Categories CRUD</h3>
+		<h3><b>You have Successfully logged in!.</b></h3>
+		<br><hr><br>
+<?php } ?>
+
+		<h3>II. Categories CRUD</h3>
+		<form id="categoriesForm">
+			<input type="text" name="name" />
+			<input type="submit" value="Add" />
+		</form>
 
 		<?php
 		/*
@@ -122,7 +125,7 @@
 		$categories = mysqli_fetch_all($result);
 
 		?>
-
+    <div id="categories">
 			  <table class="table table-bordered">
 						<tr>
 								<th>ID</th>
@@ -130,24 +133,48 @@
 								<th>Action</th>
 						</tr>
 						<?php foreach ($categories as $category) { ?>
-						<tr>
-								<td><?php echo $category[0]; ?></td>
-								<td><?php echo $category[1]; ?></td>
+						<div class="row<?php echo $category[0]; ?>">
+						  <tr>
 								<td>
-										<a href="javascript:void(0);"
-												class="glyphicon glyphicon-edit"
-												onclick="editCategory(\''.$user['id'].'\')"></a>
-										<a href="javascript:void(0);"
-												class="glyphicon glyphicon-trash"
-												onclick="return confirm(\'Are you sure to delete data?\')
-														?categoryAction(\'delete\',\''.$user['id'].'\'):false;"></a>
+									<?php echo $category[0]; ?>
 								</td>
-						</tr>
-						<?php } ?>
+								<td>
+										<input class="name" type="text" value="<?php echo $category[1]; ?>" name="categoryName" />
+								</td>
+								<td>
+										<a href="#"
+												class="update glyphicon glyphicon-edit"
+												rel="<?php echo $category[0]; ?>"></a>
+										<a href="#"
+												class="delete glyphicon glyphicon-trash"
+												rel="<?php echo $category[0]; ?>"></a>
+								</td>
+						  </tr>
+            </div>
+        		<?php } ?>
 				</table>
+		   </div>
+
 
 				<br><hr><br>
 				<h3>III. SubCategories CRUD</h3>
+        <form id="subCategoriesForm">
+          <select name="id">
+          <?php
+          $dbConnection = mysqli_connect("localhost", "root", "", "shop");
+          $query = "SELECT id, categoryName FROM categories";
+          $result = mysqli_query($dbConnection,$query);
+
+          while ($row = $result->fetch_assoc()) {
+              unset($id, $name);
+              $id = $row['id'];
+              $name = $row['categoryName'];
+              echo '<option value="'.$id.'">'.$name.'</option>';
+          } ?>
+          </select>
+          <input type="text" name="name" />
+          <input type="submit" value="Add" />
+        </form>
 
 				<?php
 				/*
@@ -173,25 +200,43 @@
 								<th>Action</th>
 						</tr>
 						<?php foreach ($subCategories as $subCategory) { ?>
-						<tr>
+            <div class="row<?php echo $category[0]; ?>">
+            <tr>
 								<td><?php echo $subCategory[0]; ?></td>
-								<td><?php echo $subCategory[4]; ?></td>
-								<td><?php echo $subCategory[2]; ?></td>
+                <td><input class="name" type="text" value="<?php echo $subCategory[4]; ?>" name="categoryName" /></td>
+                <td><input class="name" type="text" value="<?php echo $subCategory[2]; ?>" name="subCategoryName" /></td>
 								<td>
-										<a href="javascript:void(0);"
-												class="glyphicon glyphicon-edit"
-												onclick="editCategory(\''.$user['id'].'\')"></a>
-										<a href="javascript:void(0);"
-												class="glyphicon glyphicon-trash"
-												onclick="return confirm(\'Are you sure to delete data?\')
-														?categoryAction(\'delete\',\''.$user['id'].'\'):false;"></a>
+                  <a href="#"
+                      class="update glyphicon glyphicon-edit"
+                      rel="<?php echo $subCategory[0]; ?>"></a>
+                  <a href="#"
+                      class="delete glyphicon glyphicon-trash"
+                      rel="<?php echo $subCategory[0]; ?>"></a>
 								</td>
 						</tr>
+          </div>
 						<?php } ?>
 				</table>
 
 				<br><hr><br>
 				<h3>IV. Products CRUD</h3>
+        <form id="productsForm">
+          <select name="id">
+          <?php
+          $dbConnection = mysqli_connect("localhost", "root", "", "shop");
+          $query = "SELECT id, subcategoryName FROM subCategories";
+          $result = mysqli_query($dbConnection,$query);
+
+          while ($row = $result->fetch_assoc()) {
+              unset($id, $name);
+              $id = $row['id'];
+              $name = $row['subcategoryName'];
+              echo '<option value="'.$id.'">'.$name.'</option>';
+          } ?>
+          </select>
+          <input type="text" name="name" />
+          <input type="submit" value="Add" />
+        </form>
 
 				<?php
 				/*
@@ -221,72 +266,144 @@
 								<th>Action</th>
 						</tr>
 						<?php foreach ($products as $product) { ?>
-						<tr>
+            <div class="row<?php echo $category[0]; ?>">
+            <tr>
 								<td><?php echo $product[0]; ?></td>
-								<td><?php echo $product[6]; ?></td>
-								<td><?php echo $product[4]; ?></td>
-								<td><?php echo $product[2]; ?></td>
+                <td><?php echo $product[6]; ?></td>
+                <td><input class="name" type="text" value="<?php echo $product[4]; ?>" name="subCategoryName" /></td>
+                <td><input class="name" type="text" value="<?php echo $product[2]; ?>" name="productName" /></td>
 								<td>
-										<a href="javascript:void(0);"
-												class="glyphicon glyphicon-edit"
-												onclick="editCategory(\''.$user['id'].'\')"></a>
-										<a href="javascript:void(0);"
-												class="glyphicon glyphicon-trash"
-												onclick="return confirm(\'Are you sure to delete data?\')
-														?categoryAction(\'delete\',\''.$user['id'].'\'):false;"></a>
+                  <a href="#"
+                      class="update glyphicon glyphicon-edit"
+                      rel="<?php echo $product[0]; ?>"></a>
+                  <a href="#"
+                      class="delete glyphicon glyphicon-trash"
+                      rel="<?php echo $product[0]; ?>"></a>
 								</td>
 						</tr>
+            </div>
 						<?php } ?>
 				</table>
 
 
 
-				<?php } ?>
 		  </div>
 	  </div>
  	</nav>
 </body>
 
 <script>
-function categoryAction(type,id){
-    id = (typeof id == "undefined")?'':id;
-    var statusArr = {add:"added",edit:"updated",delete:"deleted"};
-    var userData = '';
-    if (type == 'add') {
-        userData = $("#addForm").find('.form').serialize()+'&action_type='+type+'&id='+id;
-    }else if (type == 'edit'){
-        userData = $("#editForm").find('.form').serialize()+'&action_type='+type;
-    }else{
-        userData = 'action_type='+type+'&id='+id;
-    }
-    $.ajax({
-        type: 'POST',
-        url: 'index.php',
-        data: userData,
-        success:function(msg){
-            if(msg == 'ok'){
-                alert('User data has been '+statusArr[type]+' successfully.');
-                getUsers();
-                $('.form')[0].reset();
-                $('.formData').slideUp();
-            }else{
-                alert('Some problem occurred, please try again.');
-            }
-        }
-    });
-}
-function editCategory(id){
-    $.ajax({
-        type: 'POST',
-        dataType:'JSON',
-        url: 'index.php',
-        data: 'action_type=data&id='+id,
-        success:function(data){
-            $('#nameEdit').val(data.name);
-            $('#editForm').slideDown();
-        }
-    });
-}
 
-</script>
+<!--
+/*
+*		---------------------------------
+*		I. Categories CRUD
+*		---------------------------------
+*/
+-->
+$(document).ready(function() {
+	$("#categoriesForm").submit(function() {
+		$.post('category/ajaxPost.php', $('#categoriesForm').serialize(), function() {
+			$('#categories').load(location.href);
+		});
+		return false;
+	});
+
+	$('.update').click(function() {
+		var item = $(this).parent();
+		var id = $(this).attr('rel');
+		var name = $('.row' + id + ' .name').val();
+
+		$.post('category/ajaxUpdate.php', {
+			'id' : id,
+			'name' : name,
+		});
+	});
+
+	$('.delete').click(function() {
+		var item = $(this).parent();
+		var id = $(this).attr('rel');
+
+		$.post('category/ajaxDelete.php', {
+			'id' : id
+		}, function() {
+			$(item).hide();
+		});
+	});
+});
+<!--
+/*
+*		---------------------------------
+*		II. SubCategories CRUD
+*		---------------------------------
+*/
+-->
+$(document).ready(function() {
+	$("#subCategoriesForm").submit(function() {
+		$.post('subcategory/ajaxPost.php', $('#subCategoriesForm').serialize(), function() {
+			$('#categories').load(location.href);
+		});
+		return false;
+	});
+
+	$('.update').click(function() {
+		var item = $(this).parent();
+		var id = $(this).attr('rel');
+		var name = $('.row' + id + ' .name').val();
+
+		$.post('subcategory/ajaxUpdate.php', {
+			'id' : id,
+			'name' : name,
+		});
+	});
+
+	$('.delete').click(function() {
+		var item = $(this).parent();
+		var id = $(this).attr('rel');
+
+		$.post('subcategory/ajaxDelete.php', {
+			'id' : id
+		}, function() {
+			$(item).hide();
+		});
+	});
+});
+<!--
+/*
+*		---------------------------------
+*		III. Products CRUD
+*		---------------------------------
+*/
+-->
+$(document).ready(function() {
+	$("#productsForm").submit(function() {
+		$.post('product/ajaxPost.php', $('#productsForm').serialize(), function() {
+			$('#categories').load(location.href);
+		});
+		return false;
+	});
+
+	$('.update').click(function() {
+		var item = $(this).parent();
+		var id = $(this).attr('rel');
+		var name = $('.row' + id + ' .name').val();
+
+		$.post('product/ajaxUpdate.php', {
+			'id' : id,
+			'name' : name,
+		});
+	});
+
+	$('.delete').click(function() {
+		var item = $(this).parent();
+		var id = $(this).attr('rel');
+
+		$.post('product/ajaxDelete.php', {
+			'id' : id
+		}, function() {
+			$(item).hide();
+		});
+	});
+});
+	</script>
 </html>

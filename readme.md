@@ -2,7 +2,7 @@
 
 ## About SHOP
 
-SHOP is an One-Page-Shop Web application, built using a [PHP](php.net) one file and enables you to:
+SHOP is an One-Page-Shop Web application, built using a [PHP](php.net) and AJAX in a one file and enables you to:
 
 - Form to Login using {username} and {password}.
 - Cookie to Remember your login information.
