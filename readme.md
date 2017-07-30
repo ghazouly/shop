@@ -6,6 +6,9 @@ SHOP is an One-Page-Shop Web application, built using a [PHP](php.net) one file 
 
 - Form to Login using {username} and {password}.
 - Cookie to Remember your login information.
+- Create, Read, Update and Delete Categories.
+- Create, Read, Update and Delete SubCategories.
+- Create, Read, Update and Delete Products.
 
 ## Contributing
 
