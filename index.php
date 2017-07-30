@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +8,7 @@
     <title>SHOP</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 		<!-- Scripts -->
@@ -41,7 +41,7 @@
 
 						$query = "SELECT * FROM users
 								WHERE userName='$userName'
-								AND use</div>rPassword='$userPassword'";
+								AND userPassword='$userPassword'";
 						$result = mysqli_query($dbConnection,$query);
 						$user = mysqli_fetch_assoc($result);
 
@@ -192,47 +192,49 @@
 				$subCategories = mysqli_fetch_all($result);
 
 				?>
-				<table class="table table-bordered">
-						<tr>
-								<th>ID</th>
-								<th>Parent Category</th>
-								<th>SubCategory Name</th>
-								<th>Action</th>
-						</tr>
-						<?php foreach ($subCategories as $subCategory) { ?>
-            <div class="row<?php echo $category[0]; ?>">
-            <tr>
-								<td><?php echo $subCategory[0]; ?></td>
-                <td><input class="name" type="text" value="<?php echo $subCategory[4]; ?>" name="categoryName" /></td>
-                <td><input class="name" type="text" value="<?php echo $subCategory[2]; ?>" name="subCategoryName" /></td>
-								<td>
-                  <a href="#"
-                      class="update glyphicon glyphicon-edit"
-                      rel="<?php echo $subCategory[0]; ?>"></a>
-                  <a href="#"
-                      class="delete glyphicon glyphicon-trash"
-                      rel="<?php echo $subCategory[0]; ?>"></a>
-								</td>
-						</tr>
-          </div>
-						<?php } ?>
-				</table>
+                <div id="subcategorycontainer">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>ID</th>
+                            <th>Parent Category</th>
+                            <th>SubCategory Name</th>
+                            <th>Action</th>
+                        </tr>
+                        <?php foreach ($subCategories as $subCategory) { ?>
+                            <div class="row<?php echo $category[0]; ?>">
+                                <tr>
+                                    <td><?php echo $subCategory[0]; ?></td>
+                                    <td><input class="name" type="text" value="<?php echo $subCategory[4]; ?>" name="categoryName" /></td>
+                                    <td><input class="name" type="text" value="<?php echo $subCategory[2]; ?>" name="subCategoryName" /></td>
+                                    <td>
+                                        <a href="#"
+                                        class="update glyphicon glyphicon-edit"
+                                        rel="<?php echo $subCategory[0]; ?>"></a>
+                                        <a href="#"
+                                        class="delete glyphicon glyphicon-trash"
+                                        rel="<?php echo $subCategory[0]; ?>"></a>
+                                    </td>
+                                </tr>
+                            </div>
+                            <?php } ?>
+                        </table>
+                </div>
 
 				<br><hr><br>
 				<h3>IV. Products CRUD</h3>
         <form id="productsForm">
           <select name="id">
           <?php
-          $dbConnection = mysqli_connect("localhost", "root", "", "shop");
-          $query = "SELECT id, subcategoryName FROM subCategories";
-          $result = mysqli_query($dbConnection,$query);
-
-          while ($row = $result->fetch_assoc()) {
-              unset($id, $name);
-              $id = $row['id'];
-              $name = $row['subcategoryName'];
-              echo '<option value="'.$id.'">'.$name.'</option>';
-          } ?>
+        //   $dbConnection = mysqli_connect("localhost", "root", "", "shop");
+        //   $query = "SELECT id, subcategoryName FROM subCategories";
+        //   $result = mysqli_query($dbConnection,$query);
+          //
+        //   while ($row = $result->fetch_assoc()) {
+        //       unset($id, $name);
+        //       $id = $row['id'];
+        //       $name = $row['subcategoryName'];
+        //       echo '<option value="'.$id.'">'.$name.'</option>';
+        //   } ?>
           </select>
           <input type="text" name="name" />
           <input type="submit" value="Add" />
@@ -246,54 +248,51 @@
 				*/
 				$dbConnection = mysqli_connect("localhost", "root", "", "shop");
 				$query = "SELECT products.id, products.subCategoryId, products.productName,
-				 					subcategories.id, subcategories.subCategoryName,
-				 					categories.id, categories.categoryName
+				 					subcategories.id as sub_cat_id, subcategories.subCategoryName,
+				 					categories.id as cat_id, categories.categoryName
 									FROM products
 											INNER JOIN subcategories
 													ON products.subCategoryId = subcategories.id
 											LEFT OUTER JOIN categories
-													ON subcategories.categoryId = categories.id";
+													ON subcategories.categoryId = categories.id GROUP BY products.id";
 				$result = mysqli_query($dbConnection,$query);
 				$products = mysqli_fetch_all($result);
 
 				?>
-				<table class="table table-bordered">
-						<tr>
-								<th>ID</th>
-								<th>Category</th>
-								<th>SubCategory</th>
-								<th>Product Name</th>
-								<th>Action</th>
-						</tr>
-						<?php foreach ($products as $product) { ?>
-            <div class="row<?php echo $category[0]; ?>">
-            <tr>
-								<td><?php echo $product[0]; ?></td>
-                <td><?php echo $product[6]; ?></td>
-                <td><input class="name" type="text" value="<?php echo $product[4]; ?>" name="subCategoryName" /></td>
-                <td><input class="name" type="text" value="<?php echo $product[2]; ?>" name="productName" /></td>
-								<td>
-                  <a href="#"
-                      class="update glyphicon glyphicon-edit"
-                      rel="<?php echo $product[0]; ?>"></a>
-                  <a href="#"
-                      class="delete glyphicon glyphicon-trash"
-                      rel="<?php echo $product[0]; ?>"></a>
-								</td>
-						</tr>
-            </div>
-						<?php } ?>
-				</table>
-
-
+				<div id="productscontainer">
+                    <table class="table table-bordered">
+    						<tr>
+    								<th>ID</th>
+    								<th>Category</th>
+    								<th>SubCategory</th>
+    								<th>Product Name</th>
+    								<th>Action</th>
+    						</tr>
+    						<?php foreach ($products as $product) { ?>
+                <div class="row<?php echo $category[0]; ?>">
+                <tr>
+    								<td><?php echo $product[0]; ?></td>
+                    <td><?php echo $product[6]; ?></td>
+                    <td><input class="name" type="text" value="<?php echo $product[4]; ?>" name="subCategoryName" /></td>
+                    <td><input class="name" type="text" value="<?php echo $product[2]; ?>" name="productName" /></td>
+    								<td>
+                      <a href="#"
+                          class="update glyphicon glyphicon-edit"
+                          rel="<?php echo $product[0]; ?>"></a>
+                      <a href="#"
+                          class="delete glyphicon glyphicon-trash"
+                          rel="<?php echo $product[0]; ?>"></a>
+    								</td>
+    						</tr>
+                </div>
+    						<?php } ?>
+    				</table>
+				</div>
 
 		  </div>
 	  </div>
  	</nav>
-</body>
-
-<script>
-
+<script type="text/javascript">
 <!--
 /*
 *		---------------------------------
@@ -302,34 +301,36 @@
 */
 -->
 $(document).ready(function() {
-	$("#categoriesForm").submit(function() {
-		$.post('category/ajaxPost.php', $('#categoriesForm').serialize(), function() {
-			$('#categories').load(location.href);
-		});
-		return false;
-	});
+    $("#categoriesForm").submit(function(e) {
+        e.preventDefault();
+        // console.log('test');
+        $.post('category/ajaxPost.php', $('#categoriesForm').serialize(), function() {
+        $('#categories').load(location.href);
+        });
+        return false;
+    });
 
-	$('.update').click(function() {
-		var item = $(this).parent();
-		var id = $(this).attr('rel');
-		var name = $('.row' + id + ' .name').val();
+    $('#categories').find('.update').click(function() {
+        var item = $(this).parent();
+        var id = $(this).attr('rel');
+        var name = $(this).parents('tr').find('input[name=categoryName]').val();
 
-		$.post('category/ajaxUpdate.php', {
-			'id' : id,
-			'name' : name,
-		});
-	});
+        $.post('category/ajaxUpdate.php', {
+            'id' : id,
+            'name' : name,
+        });
+    });
 
-	$('.delete').click(function() {
-		var item = $(this).parent();
-		var id = $(this).attr('rel');
+    $('#categories').find('.delete').click(function() {
+        var item = $(this).parents('tr');
+        var id = $(this).attr('rel');
 
-		$.post('category/ajaxDelete.php', {
-			'id' : id
-		}, function() {
-			$(item).hide();
-		});
-	});
+        $.post('category/ajaxDelete.php', {
+            'id' : id
+        }, function() {
+            $(item).hide();
+        });
+    });
 });
 <!--
 /*
@@ -339,34 +340,34 @@ $(document).ready(function() {
 */
 -->
 $(document).ready(function() {
-	$("#subCategoriesForm").submit(function() {
-		$.post('subcategory/ajaxPost.php', $('#subCategoriesForm').serialize(), function() {
-			$('#categories').load(location.href);
-		});
-		return false;
-	});
+    $("#subCategoriesForm").submit(function() {
+        $.post('subcategory/ajaxPost.php', $('#subCategoriesForm').serialize(), function() {
+            $('#categories').load(location.href);
+        });
+        return false;
+    });
 
-	$('.update').click(function() {
-		var item = $(this).parent();
-		var id = $(this).attr('rel');
-		var name = $('.row' + id + ' .name').val();
+    $('#subcategorycontainer').find('.update').click(function() {
+        var item = $(this).parent();
+        var id = $(this).attr('rel');
+        var name = $(this).parents('tr').find('input[name=subCategoryName]').val();
 
-		$.post('subcategory/ajaxUpdate.php', {
-			'id' : id,
-			'name' : name,
-		});
-	});
+        $.post('subcategory/ajaxUpdate.php', {
+            'id' : id,
+            'name' : name
+        });
+    });
 
-	$('.delete').click(function() {
-		var item = $(this).parent();
-		var id = $(this).attr('rel');
+    $('#subcategorycontainer').find('.delete').click(function() {
+        var item = $(this).parent();
+        var id = $(this).attr('rel');
 
-		$.post('subcategory/ajaxDelete.php', {
-			'id' : id
-		}, function() {
-			$(item).hide();
-		});
-	});
+        $.post('subcategory/ajaxDelete.php', {
+            'id' : id
+        }, function() {
+            $(item).hide();
+        });
+    });
 });
 <!--
 /*
@@ -376,34 +377,36 @@ $(document).ready(function() {
 */
 -->
 $(document).ready(function() {
-	$("#productsForm").submit(function() {
-		$.post('product/ajaxPost.php', $('#productsForm').serialize(), function() {
-			$('#categories').load(location.href);
-		});
-		return false;
-	});
-
-	$('.update').click(function() {
-		var item = $(this).parent();
-		var id = $(this).attr('rel');
-		var name = $('.row' + id + ' .name').val();
-
-		$.post('product/ajaxUpdate.php', {
-			'id' : id,
-			'name' : name,
-		});
-	});
-
-	$('.delete').click(function() {
-		var item = $(this).parent();
-		var id = $(this).attr('rel');
-
-		$.post('product/ajaxDelete.php', {
-			'id' : id
-		}, function() {
-			$(item).hide();
-		});
-	});
+$("#productsForm").submit(function() {
+    $.post('product/ajaxPost.php', $('#productsForm').serialize(), function() {
+        $('#categories').load(location.href);
+    });
+    return false;
 });
-	</script>
+
+$('#productscontainer').find('.update').click(function() {
+    var item = $(this).parent();
+    var id = $(this).attr('rel');
+    var name = $(this).parents('tr').find('input[name=productName]').val();
+
+    $.post('product/ajaxUpdate.php', {
+        'id' : id,
+        'name' : name,
+    });
+});
+
+$('#productscontainer').find('.delete').click(function() {
+    var item = $(this).parent();
+    var id = $(this).attr('rel');
+
+    $.post('product/ajaxDelete.php', {
+        'id' : id
+    }, function() {
+        $(item).hide();
+    });
+});
+});
+</script>
+</body>
+
 </html>
