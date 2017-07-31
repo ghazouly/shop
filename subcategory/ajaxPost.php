@@ -1,7 +1,7 @@
 <?php
 
-$categoryId = $_POST['categoryId'];
-$subCategoryName = $_POST['subCategoryName'];
+$categoryId = $_POST['id'];
+$subCategoryName = $_POST['name'];
 
 if ($subCategoryName) {
 		$dbConnection = mysqli_connect("localhost", "root", "", "shop");

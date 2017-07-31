@@ -225,16 +225,16 @@
         <form id="productsForm">
           <select name="id">
           <?php
-        //   $dbConnection = mysqli_connect("localhost", "root", "", "shop");
-        //   $query = "SELECT id, subcategoryName FROM subCategories";
-        //   $result = mysqli_query($dbConnection,$query);
-          //
-        //   while ($row = $result->fetch_assoc()) {
-        //       unset($id, $name);
-        //       $id = $row['id'];
-        //       $name = $row['subcategoryName'];
-        //       echo '<option value="'.$id.'">'.$name.'</option>';
-        //   } ?>
+          $dbConnection = mysqli_connect("localhost", "root", "", "shop");
+          $query = "SELECT id, subcategoryName FROM subCategories";
+          $result = mysqli_query($dbConnection,$query);
+
+          while ($row = $result->fetch_assoc()) {
+            //   unset($id, $name);
+              $id = $row['id'];
+              $name = $row['subcategoryName'];
+              echo '<option value="'.$id.'">'.$name.'</option>';
+          } ?>
           </select>
           <input type="text" name="name" />
           <input type="submit" value="Add" />
@@ -340,7 +340,12 @@ $(document).ready(function() {
 */
 -->
 $(document).ready(function() {
+<<<<<<< HEAD
+    $("#subCategoriesForm").submit(function(e) {
+        e.preventDefault();
+=======
     $("#subCategoriesForm").submit(function() {
+>>>>>>> add9c3c4c8776ae97db4a42a07ed39209f794dbd
         $.post('subcategory/ajaxPost.php', $('#subCategoriesForm').serialize(), function() {
             $('#categories').load(location.href);
         });
